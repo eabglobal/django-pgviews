@@ -155,7 +155,7 @@ This will forcibly update any views that conflict with your new SQL.
 When running migrations, we will automatically sync your new views using a
 `postmigration` signal, if at any moment you want to override this functionality
 you can supplement your own by adding the full path to `PGVIEW_SYNC_VIEW_PATH`
-your own migration command.
+with your own migration command.
 
 ### Dependencies
 
