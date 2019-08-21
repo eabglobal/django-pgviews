@@ -150,6 +150,13 @@ python manage.py sync_pgviews --force
 
 This will forcibly update any views that conflict with your new SQL.
 
+### Migrations
+
+When running migrations, we will automatically sync your new views using a
+`postmigration` signal, if at any moment you want to override this functionality
+you can supplement your own by adding the full path to `PGVIEW_SYNC_VIEW_PATH`
+your own migration command.
+
 ### Dependencies
 
 You can specify other views you depend on. This ensures the other views are
@@ -214,9 +221,9 @@ def customer_saved(sender, action=None, instance=None, **kwargs):
 
 Postgres 9.4 and up allow materialized views to be refreshed concurrently, without blocking reads, as long as a
 unique index exists on the materialized view. To enable concurrent refresh, specify the name of a column that can be
-used as a unique index on the materialized view. Unique index can be defined on more than one column of a materialized 
-view. Once enabled, passing `concurrently=True` to the model's refresh method will result in postgres performing the 
-refresh concurrently. (Note that the refresh method itself blocks until the refresh is complete; concurrent refresh is 
+used as a unique index on the materialized view. Unique index can be defined on more than one column of a materialized
+view. Once enabled, passing `concurrently=True` to the model's refresh method will result in postgres performing the
+refresh concurrently. (Note that the refresh method itself blocks until the refresh is complete; concurrent refresh is
 most useful when materialized views are updated in another process or thread.)
 
 Example:
