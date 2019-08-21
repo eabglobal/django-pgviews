@@ -41,6 +41,5 @@ class ViewConfig(apps.AppConfig):
     def ready(self):
         """Find and setup the apps to set the post_migrate hooks for.
         """
-        import ipdb; print("\a"); ipdb.sset_trace()
         sync_pgviews = import_string(PGVIEW_SYNC_VIEW_PATH)
         signals.post_migrate.connect(sync_pgviews)
