@@ -81,6 +81,9 @@ def create_view(connection, view_name, view_query, update=True, force=False,
 
     if '.' in view_name:
         vschema, vname = view_name.split('.', 1)
+    elif hasattr(connection, 'schema_name'):
+        # tenant aware see (django-tenant-schemas or django-tenant)
+        vschema, vname = connection.schema_name, view_name
     else:
         vschema, vname = 'public', view_name
 
