@@ -77,6 +77,8 @@ class ViewSyncer(object):
                     msg = (
                         "exists with incompatible schema, "
                         "--force required to update")
+                elif status == 'WRONG_SCHEMA':
+                    msg = "should not create view for a specific schema on the wrong schema"
                 log.info("pgview %(python_name)s %(msg)s" % {
                     'python_name': name,
                     'msg': msg})
