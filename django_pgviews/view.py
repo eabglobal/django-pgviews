@@ -87,6 +87,11 @@ def create_view(connection, view_name, view_query, update=True, force=False,
     else:
         vschema, vname = 'public', view_name
 
+    # Ignore any views that are trying to be created on a schema that doesn't match the connection.
+    if hasattr(connection, 'schema_name'):
+        if vschema != connection.schema_name:
+            return 'WRONG_SCHEMA'
+
     cursor_wrapper = connection.cursor()
     cursor = cursor_wrapper.cursor
     try:
