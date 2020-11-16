@@ -6,6 +6,7 @@ import logging
 import re
 
 import django
+from django.conf import settings
 from django.core import exceptions
 from django.db import connection, transaction
 from django.db.models.query import QuerySet
@@ -39,6 +40,12 @@ def hasfield(model_cls, field_name):
         return True
     except models.FieldDoesNotExist:
         return False
+
+
+def is_in_app_list(app_name, app_list):
+    """Checks to see if the provided app name is in the app list"""
+    app_list_combined = " ".join(app_list)
+    return app_name in app_list_combined
 
 
 # Projections of models fields onto views which have been deferred due to
@@ -89,7 +96,9 @@ def create_view(connection, view_name, view_query, update=True, force=False,
 
     # Ignore any views that are trying to be created on a schema that doesn't match the connection.
     if hasattr(connection, 'schema_name'):
-        if vschema != connection.schema_name:
+        app, table = vname.split('_', 1)
+        if (vschema != 'public' and is_in_app_list(app, settings.SHARED_APPS)) or \
+                (vschema == 'public' and is_in_app_list(app, settings.TENANT_APPS)):
             return 'WRONG_SCHEMA'
 
     cursor_wrapper = connection.cursor()
