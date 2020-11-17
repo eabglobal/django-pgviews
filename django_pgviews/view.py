@@ -44,8 +44,10 @@ def hasfield(model_cls, field_name):
 
 def is_in_app_list(app_name, app_list):
     """Checks to see if the provided app name is in the app list"""
-    app_list_combined = " ".join(app_list)
-    return app_name in app_list_combined
+    app_list_expanded_and_combined = []
+    for app in app_list:
+        app_list_expanded_and_combined.extend(app.split("."))
+    return app_name in app_list_expanded_and_combined
 
 
 # Projections of models fields onto views which have been deferred due to
